@@ -395,6 +395,12 @@ fahrplan_gui_t::fahrplan_gui_t(schedule_t* fpl_, spieler_t* sp_, convoihandle_t 
 	lb_waitlevel_as_clock.set_pos( koord( BUTTON_WIDTH*2-35, ypos+2 ) );
 	add_komponente(&lb_waitlevel_as_clock);
 
+	bt_always_load.init(button_t::square_automatic, "Always Load", koord( BUTTON_WIDTH*2, ypos ), koord(BUTTON_WIDTH,BUTTON_HEIGHT) );
+	bt_always_load.set_tooltip("By default, passengers will not load convoys until ten minutes before scheduled departure. Select this option to disable that feature and instead allow passengers to load at any time before departure.");
+	bt_always_load.pressed = fpl->is_always_load();
+	bt_always_load.add_listener(this);
+	add_komponente(&bt_always_load);
+	
 	ypos += BUTTON_HEIGHT;
 
 	// Spacing
@@ -724,6 +730,9 @@ DBG_MESSAGE("fahrplan_gui_t::action_triggered()","komp=%p combo=%p",komp,&line_s
 	} 
 	else if (komp == &bt_bidirectional) {
 		fpl->set_bidirectional(bt_bidirectional.pressed);
+	} 
+	else if (komp == &bt_always_load) {
+		fpl->set_always_load(bt_always_load.pressed);
 	} 
 	else if (komp == &bt_same_spacing_shift) {
 		fpl->set_same_spacing_shift(bt_same_spacing_shift.pressed);

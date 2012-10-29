@@ -51,6 +51,7 @@ void schedule_t::copy_from(const schedule_t *src)
 	abgeschlossen = src->ist_abgeschlossen();
 	spacing = src->get_spacing();
 	bidirectional = src->is_bidirectional();
+	always_load = src->is_always_load();
 	mirrored = src->is_mirrored();
 	same_spacing_shift = src->is_same_spacing_shift();
 
@@ -309,7 +310,11 @@ bool schedule_t::matches(karte_t *welt, const schedule_t *fpl)
 		return true;
 	}
 	// different bidirectional or mirrored settings => not equal
-	if ((this->bidirectional != fpl->bidirectional) || (this->mirrored != fpl->mirrored)) {
+	if ((this->bidirectional != fpl->bidirectional) || (this->mirrored != fpl->mirrored )) {
+		return false;
+	}
+	// different always_load => not equal
+	if (this->always_load != fpl->always_load) {
 		return false;
 	}
 	// unequal count => not equal
@@ -416,7 +421,7 @@ void schedule_t::increment_index(uint8 *index, bool *reversed) const {
 void schedule_t::sprintf_schedule( cbuffer_t &buf ) const
 {
 	buf.append( aktuell );
-	buf.printf( ",%i,%i,%i,%i", bidirectional, mirrored, spacing, same_spacing_shift) ;
+	buf.printf( ",%i,%i,%i,%i,%i", bidirectional, mirrored, spacing, same_spacing_shift, always_load) ;
 	buf.append( "|" );
 	buf.append( (int)get_type() );
 	buf.append( "|" );
@@ -444,6 +449,10 @@ bool schedule_t::sscanf_schedule( const char *ptr )
 	if ( *p && *p == ',' ) { p++; }
 	// mirrored flag
 	if( *p && (*p!=','  &&  *p!='|') ) { mirrored = bool(atoi(p)); }
+	while ( *p && isdigit(*p) ) { p++; }
+	if ( *p && *p == ',' ) { p++; }
+	// always_load flag
+	if( *p && (*p!=','  &&  *p!='|') ) { always_load = bool(atoi(p)); }
 	while ( *p && isdigit(*p) ) { p++; }
 	if ( *p && *p == ',' ) { p++; }
 	// spacing

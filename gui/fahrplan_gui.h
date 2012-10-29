@@ -99,7 +99,7 @@ private:
 
 	// always needed
 	button_t bt_add, bt_insert, bt_remove; // stop management
-	button_t bt_bidirectional, bt_mirror, bt_same_spacing_shift;
+	button_t bt_bidirectional, bt_mirror, bt_always_load, bt_same_spacing_shift;
 
 	button_t bt_wait_prev, bt_wait_next;	// waiting in parts of month
 	gui_label_t lb_wait, lb_waitlevel, lb_waitlevel_as_clock;

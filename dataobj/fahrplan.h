@@ -24,7 +24,7 @@ public:
 	};
 
 protected:
-	schedule_t() : abgeschlossen(false), bidirectional(false), mirrored(false), same_spacing_shift(true), aktuell(0), spacing(0) {}
+	schedule_t() : abgeschlossen(false), bidirectional(false), mirrored(false), always_load(false), same_spacing_shift(true), aktuell(0), spacing(0) {}
 
 public:
 	minivec_tpl<linieneintrag_t> eintrag;
@@ -145,9 +145,11 @@ public:
 	bool matches(karte_t *welt, const schedule_t *fpl);
 
 	inline bool is_bidirectional() const { return bidirectional; }
+	inline bool is_always_load() const {return always_load;}
 	inline bool is_mirrored() const { return mirrored; }
 	inline bool is_same_spacing_shift() const { return same_spacing_shift; }
 	void set_bidirectional(bool bidirec = true ) { bidirectional = bidirec; }
+	void set_always_load(bool alwload = true) {always_load = alwload; }
 	void set_mirrored(bool mir = true ) { mirrored = mir; }
 	void set_same_spacing_shift(bool s = true) { same_spacing_shift = s; }
 
@@ -166,10 +168,12 @@ public:
 	 * @author: jamespetts, September 2011
 	 */
 	bool is_contained (koord3d pos);
-
+	
 private:
+	
 	bool abgeschlossen;
 	bool bidirectional;
+	bool always_load;
 	bool mirrored;
 	bool same_spacing_shift;
 	uint8 aktuell;
@@ -188,6 +192,7 @@ private:
 class zugfahrplan_t : public schedule_t
 {
 public:
+	
 	zugfahrplan_t() {}
 	zugfahrplan_t(loadsave_t* const file) : schedule_t(file) {}
 	schedule_t* copy() { schedule_t *s = new zugfahrplan_t(); s->copy_from(this); return s; }

@@ -1712,9 +1712,12 @@ ware_t haltestelle_t::hole_ab(const ware_besch_t *wtyp, uint32 maxi, const sched
 						// Assures that passengers will board the first train to leave, not the first train to arrive
 						if ((fpl->get_current_eintrag().ladegrad > 0) && (fpl->get_spacing() > 0))
 						{
-							if ((welt->ticks_to_tenths_of_minutes(time_till_departure)) > 100)
+							if (fpl->is_always_load())
 							{
+								if ((welt->ticks_to_tenths_of_minutes(time_till_departure)) > 100)
+								{
 								continue;
+								}
 							}
 						}
 	
